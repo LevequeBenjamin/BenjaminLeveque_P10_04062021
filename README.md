@@ -10,6 +10,8 @@ Django REST.
 ## Technologies
 - Python
 - Django rest_framework
+- django-rest-auth
+- djangorestframework-simplejwt
 
 ## Auteur
 Lévêque Benjamin
