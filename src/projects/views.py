@@ -8,7 +8,7 @@ from django.db import IntegrityError
 
 # rest_framework
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 # models
@@ -74,8 +74,8 @@ class ContributorListCreateView(ListCreateAPIView):
         """
         Override of the perform_create method to add the projet and user instance.
         """
-        user = CustomUser.objects.get(pk=self.request.data.get('user'))
-        project = Project.objects.get(pk=self.kwargs.get('id_project'))
+        user = get_object_or_404(CustomUser, pk=self.request.data.get("user"))
+        project = get_object_or_404(Project, pk=self.kwargs.get("id_project"))
         if user == project.author:
             raise ValidationError("An author cannot be added as a contributor")
         try:
@@ -112,7 +112,7 @@ class IssueListCreateView(ListCreateAPIView):
         """
         Override of the perform_create method to add the projet author and assignee.
         """
-        project = Project.objects.get(pk=self.kwargs.get('id_project'))
+        project = get_object_or_404(Project, pk=self.kwargs.get("id_project"))
         serializer.save(project=project, author=self.request.user, assignee=project.author)
 
 
@@ -144,7 +144,7 @@ class CommentListCreateView(ListCreateAPIView):
         """
         Override of the perform_create method to add the issue and author.
         """
-        issue = Issue.objects.get(pk=self.kwargs.get('id_issue'))
+        issue = get_object_or_404(Issue, pk=self.kwargs.get("id_issue"))
         serializer.save(issue=issue, author=self.request.user)
 
 
