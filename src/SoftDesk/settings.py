@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'accounts',
     'projects',
