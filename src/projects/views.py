@@ -81,8 +81,8 @@ class ContributorListCreateView(ListCreateAPIView):
     """
     serializer_class = ContributeurSerializer
 
-    # A user must be authenticated
-    @permission_classes([IsAuthenticated])
+    # The user must be authenticated, be part of the contributor ou the author of the project.
+    @permission_classes([IsAuthenticated & (IsProjectContributor | IsProjectAuthor)])
     def get_queryset(self, *args, **kwargs):
         """
         Override of the get_queryset method to return contributors related to the project.
