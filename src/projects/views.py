@@ -52,9 +52,27 @@ class ProjectUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
     Concrete view for retrieving, updating or deleting a Project instance.
     """
     serializer_class = ProjectSerializer
-    # The user must be authenticated and the author of the project.
-    permission_classes = [IsAuthenticated & IsAuthor]
     queryset = Project.objects.all()
+
+    # The user must be authenticated, be part of the contributor ou the author of the project.
+    @permission_classes([IsAuthenticated & (IsProjectContributor | IsAuthor)])
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    # The user must be authenticated and the author of the issue.
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    # The user must be authenticated and the author of the issue.
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    # The user must be authenticated and the author of the issue.
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
 class ContributorListCreateView(ListCreateAPIView):
@@ -124,9 +142,27 @@ class IssueUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
     Concrete view for retrieving, updating or deleting a Issue instance.
     """
     serializer_class = IssueSerializer
-    # The user must be authenticated and the author of the issue.
-    permission_classes = [IsAuthenticated & IsAuthor]
     queryset = Issue.objects.all()
+
+    # The user must be authenticated, be part of the contributor ou the author of the project.
+    @permission_classes([IsAuthenticated & (IsProjectContributor | IsProjectAuthor)])
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    # The user must be authenticated and the author of the issue.
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    # The user must be authenticated and the author of the issue.
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    # The user must be authenticated and the author of the issue.
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
 class CommentListCreateView(ListCreateAPIView):
@@ -156,5 +192,20 @@ class CommentUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
     Concrete view for retrieving, updating or deleting a Comment instance.
     """
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated & IsAuthor]
     queryset = Comment.objects.all()
+
+    @permission_classes([IsAuthenticated & (IsProjectContributor | IsProjectAuthor)])
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    @permission_classes([IsAuthenticated & IsAuthor])
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

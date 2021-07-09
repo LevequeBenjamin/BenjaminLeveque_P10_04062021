@@ -25,7 +25,7 @@ class IsProjectAuthor(BasePermission):
         """
         The instance must have an author attribute and be equal to the authenticated user.
         """
-        project = Project.objects.get(pk=view.kwargs.get("id_projet"))
+        project = Project.objects.get(pk=view.kwargs.get("id_project"))
         return request.user == project.author
 
 
@@ -38,8 +38,8 @@ class IsProjectContributor(BasePermission):
         """
         The instance must have an author attribute and must contain the authenticated user.
         """
-        project = Project.objects.get(pk=view.kwargs.get("id_projet"))
-        return request.user in project.contributors
+        project = Project.objects.get(pk=view.kwargs.get("id_project"))
+        return request.user in project.contributors.all()
 
 
 class IsContributor(BasePermission):
