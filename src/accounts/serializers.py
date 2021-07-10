@@ -1,6 +1,7 @@
 """Docstrings."""
 
 # models
+from django.contrib.auth.password_validation import validate_password
 from django.utils.text import gettext_lazy as _
 
 from rest_framework_simplejwt.exceptions import TokenError
@@ -52,3 +53,12 @@ class RefreshTokenSerializer(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail('bad_token')
+
+
+class UpdatePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+
+class DestroyCustomUserSerializer(serializers.Serializer):
+    password = serializers.CharField(required=True)

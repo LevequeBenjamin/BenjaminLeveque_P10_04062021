@@ -11,4 +11,6 @@ class IsUser(BasePermission):
         """
         The instance must have an author attribute and be equal to the authenticated user.
         """
+        if request.method == 'GET':
+            return True
         return obj.email == request.user.email
