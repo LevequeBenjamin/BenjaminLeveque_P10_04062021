@@ -1,43 +1,51 @@
 """Docstrings."""
 
-# models
-from django.contrib.auth.password_validation import validate_password
+# django
 from django.utils.text import gettext_lazy as _
 
+# rest_framework
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import serializers
 
+# models
 from accounts.models import CustomUser
 
 # rest_auth
 from rest_auth.registration.serializers import RegisterSerializer
 
-# rest_framework
-from rest_framework import serializers
-
 
 class CustomRegistrationSerializer(RegisterSerializer):
-    """Docstrings."""
+    """
+    Inherits from RegisterSerializer.
+    Allows to serialize or deserialize the register for CustomUser.
+    """
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
 
     def custom_signup(self, request, user):
+        """Add firstname and lastname."""
         user.first_name = self.validated_data.get('first_name', '')
         user.last_name = self.validated_data.get('last_name', '')
         user.save(update_fields=['first_name', 'last_name'])
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    """Allows to serialize or deserialize the user according
-     to the verb of the request."""
+    """
+    Allows to serialize or deserialize the user according
+    to the verb of the request.
+    """
 
     class Meta:
-        """Docstrings."""
+        """Meta options."""
         model = CustomUser
         fields = ('id', 'email', 'first_name', "last_name")
 
 
 class RefreshTokenSerializer(serializers.Serializer):
+    """
+    Allows to serialize refresh token.
+    """
     refresh = serializers.CharField()
 
     default_error_messages = {
@@ -45,10 +53,15 @@ class RefreshTokenSerializer(serializers.Serializer):
     }
 
     def validate(self, attrs):
+        """Set token."""
         self.token = attrs['refresh']
         return attrs
 
     def save(self, **kwargs):
+        """
+        Ensures this token is included in the outstanding token list and
+        adds it to the blacklist.
+        """
         try:
             RefreshToken(self.token).blacklist()
         except TokenError:
@@ -56,9 +69,15 @@ class RefreshTokenSerializer(serializers.Serializer):
 
 
 class UpdatePasswordSerializer(serializers.Serializer):
+    """
+    Allows to serialize refresh old and new password.
+    """
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
 
 class DestroyCustomUserSerializer(serializers.Serializer):
+    """
+    Allows to serialize password.
+    """
     password = serializers.CharField(required=True)

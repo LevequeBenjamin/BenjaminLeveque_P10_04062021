@@ -32,7 +32,7 @@ class ProjectListCreateView(ListCreateAPIView):
 
     def get_queryset(self, *args, **kwargs):
         """
-        Override of the get_queryset method to return projects related to the authenticated user
+        Override of the get_queryset method to return projects related to the authenticated user.
         """
         contributor_projects = Project.objects.filter(author=self.request.user)
         author_projects = Project.objects.filter(contributors=self.request.user)

@@ -8,6 +8,7 @@ class IsAuthor(BasePermission):
     """
     Authorization at the object level to allow only the authors of an object to modify it.
     Assumes the model instance has an "author" attribute.
+    Return true if it's a get method and the user is admin.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -25,6 +26,7 @@ class IsAuthor(BasePermission):
 class IsProjectAuthor(BasePermission):
     """
     Verification of global authorizations for project authors.
+    Return true if it's a get method and the user is admin.
     """
 
     def has_permission(self, request, view):

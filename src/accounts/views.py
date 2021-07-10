@@ -1,12 +1,18 @@
+# rest_framework
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import GenericAPIView, ListAPIView, UpdateAPIView, \
-    RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, UpdateAPIView, \
+    RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+# models
 from accounts.models import CustomUser
-from accounts.permissions import IsUser
+
+# permissions
+from accounts.permissions import IsUser, IsUserRequest
+
+# serializers
 from accounts.serializers import CustomUserSerializer, RefreshTokenSerializer, UpdatePasswordSerializer, \
     DestroyCustomUserSerializer
 
@@ -22,21 +28,23 @@ class CustomUserListView(ListAPIView):
 
 
 class LogoutView(CreateAPIView):
+    """
+    Concrete view for adds the token to the blacklist.
+    """
     serializer_class = RefreshTokenSerializer
-    # A user must be authenticated, be the user or admin.
-    permission_classes = [IsAuthenticated, IsUser]
+    # A user must be authenticated, be the user.
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args):
-        """Docstrings."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CustomUserRetrieveView(RetrieveUpdateAPIView):
+class CustomUserRetrieveUpdateView(RetrieveUpdateAPIView):
     """
-    Concrete view for retrieving a CustomUser instance.
+    Concrete view for retrieving, updating a CustomUser instance.
     """
 
     queryset = CustomUser.objects.all()
@@ -52,8 +60,8 @@ class CustomUserDestroyView(DestroyAPIView):
 
     queryset = CustomUser.objects.all()
     serializer_class = DestroyCustomUserSerializer
-    # A user must be authenticated, be the user or admin.
-    permission_classes = [IsAuthenticated, IsUser]
+    # A user must be authenticated, be the user.
+    permission_classes = [IsAuthenticated, IsUserRequest]
 
     def get_object(self, queryset=None):
         """Returns the object the view is displaying."""
@@ -77,12 +85,12 @@ class CustomUserUpdatePasswordView(UpdateAPIView):
 
     queryset = CustomUser.objects.all()
     serializer_class = UpdatePasswordSerializer
-    # A user must be authenticated, be the user or admin.
-    permission_classes = [IsAuthenticated, IsUser]
+    # A user must be authenticated and be the user.
+    permission_classes = [IsAuthenticated, IsUserRequest]
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         """Returns the object the view is displaying."""
-        obj = self.request.user
+        obj = get_object_or_404(CustomUser, pk=self.kwargs.get("pk"))
         return obj
 
     def update(self, request, *args, **kwargs):

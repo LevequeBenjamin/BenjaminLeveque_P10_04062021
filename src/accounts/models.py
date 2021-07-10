@@ -7,9 +7,11 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class CustomAccountManager(BaseUserManager):
-    """Docstrings."""
+    """Inherits from BaseUserManager for creating CustomUser instance."""
     def create_superuser(self, email, first_name=None, last_name=None, password=None, **other_fields):
-        """Docstrings."""
+        """
+        Creates and saves a superuser with the given email, firstname, lastname and password.
+        """
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
 
@@ -23,7 +25,9 @@ class CustomAccountManager(BaseUserManager):
         return self.create_user(email, first_name, last_name, password, **other_fields)
 
     def create_user(self, email, first_name=None, last_name=None, password=None, **other_fields):
-        """Docstrings."""
+        """
+        Creates and saves a User with the given email, firstname, lastname and password.
+        """
         if not email:
             raise ValueError(_('You must provide an email address'))
 
@@ -36,7 +40,9 @@ class CustomAccountManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    """Docstrings."""
+    """
+    This is a class allowing to create a User.
+    """
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)

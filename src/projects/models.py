@@ -9,7 +9,9 @@ CustomUserModel = get_user_model()
 
 
 class Project(models.Model):
-    """Docstrings."""
+    """
+    This is a class allowing to create a Project.
+    """
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=1000)
     type = models.CharField(max_length=128)
@@ -18,7 +20,9 @@ class Project(models.Model):
 
 
 class Contributor(models.Model):
-    """Docstrings."""
+    """
+    This is a class allowing to create a Contributor.
+    """
     user = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     role = models.CharField(max_length=128)
@@ -28,7 +32,9 @@ class Contributor(models.Model):
 
 
 class Issue(models.Model):
-    """Docstrings."""
+    """
+    This is a class allowing to create a Project.
+    """
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=1000)
     tag = models.CharField(max_length=128)
@@ -41,7 +47,9 @@ class Issue(models.Model):
 
 
 class Comment(models.Model):
-    """Docstrings."""
+    """
+    This is a class allowing to create a Project.
+    """
     description = models.TextField(max_length=1000)
     author = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='author_comment')
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, related_name='comment')
