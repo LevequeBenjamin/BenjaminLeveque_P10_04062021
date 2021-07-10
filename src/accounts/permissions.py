@@ -13,4 +13,6 @@ class IsUser(BasePermission):
         """
         if request.method == 'GET':
             return True
+        if request.user.is_superuser:
+            return True
         return obj.email == request.user.email
