@@ -10,7 +10,7 @@ from accounts.serializers import CustomUserSerializer
 from projects.models import Project, Issue, Comment, Contributor
 
 
-class ContributeurSerializer(serializers.ModelSerializer):
+class ContributorSerializer(serializers.ModelSerializer):
     """
     Allows to serialize or deserialize the contributor according
     to the verb of the request.
@@ -65,4 +65,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta options."""
         model = Project
-        fields = ('id', 'title', 'description', 'type', 'author', 'contributors', 'issues', 'comments')
+        fields = (
+            'id', 'title', 'description', 'type', 'author',
+            'contributors', 'issues', 'comments', 'created_time',
+        )

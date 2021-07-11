@@ -8,7 +8,8 @@ from django.db import IntegrityError
 
 # rest_framework
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, DestroyAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView,\
+    DestroyAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 # models
@@ -16,10 +17,10 @@ from accounts.models import CustomUser
 from projects.models import Project, Contributor, Issue, Comment
 
 # permissions
-from projects.permissions import IsAuthor, IsProjectAuthor, IsProjectContributor
+from projects.permissions import IsAuthor, IsProjectAuthor, IsProjectContributor, IsAuthorOrContributor
 
 # serializers
-from projects.serializers import ProjectSerializer, ContributeurSerializer, IssueSerializer, CommentSerializer
+from projects.serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 
 
 class ProjectListCreateView(ListCreateAPIView):
@@ -60,7 +61,7 @@ class ContributorListCreateView(ListCreateAPIView):
     """
     Concrete view for listing a queryset or creating a Project instance.
     """
-    serializer_class = ContributeurSerializer
+    serializer_class = ContributorSerializer
     # The user must be authenticated, be part of the contributor ou the author of the project.
     permission_classes = [IsAuthenticated, IsProjectAuthor]
 
@@ -88,7 +89,7 @@ class ContributorDestroyView(DestroyAPIView):
     """
     Concrete view for deleting a contributor instance.
     """
-    serializer_class = ContributeurSerializer
+    serializer_class = ContributorSerializer
     # The user must be authenticated, the contributor ou the author of the project.
     permission_classes = [IsAuthenticated, IsProjectAuthor]
     queryset = Contributor.objects.all()
@@ -123,7 +124,7 @@ class IssueUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = IssueSerializer
     queryset = Issue.objects.all()
     # The user must be authenticated, be part of the contributor ou the author of the project.
-    permission_classes = [IsAuthenticated, IsAuthor]
+    permission_classes = [IsAuthenticated, IsAuthorOrContributor]
 
 
 class CommentListCreateView(ListCreateAPIView):

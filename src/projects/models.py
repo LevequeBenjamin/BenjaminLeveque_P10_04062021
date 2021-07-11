@@ -17,6 +17,16 @@ class Project(models.Model):
     type = models.CharField(max_length=128)
     author = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='author_project')
     contributors = models.ManyToManyField(CustomUserModel, through="Contributor")
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta options."""
+        ordering = ["-created_time"]
+        verbose_name = "Project"
+
+    def __str__(self):
+        """Represents the class objects as a string."""
+        return self.title
 
 
 class Contributor(models.Model):
@@ -30,10 +40,14 @@ class Contributor(models.Model):
     class Meta:
         unique_together = ('user', 'project')
 
+    def __str__(self):
+        """Represents the class objects as a string."""
+        return self.user
+
 
 class Issue(models.Model):
     """
-    This is a class allowing to create a Project.
+    This is a class allowing to create a Issue.
     """
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=1000)
@@ -45,12 +59,26 @@ class Issue(models.Model):
     assignee = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='assignee')
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='issue')
 
+    class Meta:
+        """Meta options."""
+        ordering = ["-created_time"]
+        verbose_name = "Issue"
+
+    def __str__(self):
+        """Represents the class objects as a string."""
+        return self.title
+
 
 class Comment(models.Model):
     """
-    This is a class allowing to create a Project.
+    This is a class allowing to create a Comment.
     """
     description = models.TextField(max_length=1000)
     author = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='author_comment')
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, related_name='comment')
     created_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta options."""
+        ordering = ["-created_time"]
+        verbose_name = "Comment"

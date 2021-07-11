@@ -1,7 +1,9 @@
+# rest_framework
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import BasePermission
 
-from projects.models import Project, Issue
+# models
+from projects.models import Project
 
 
 class IsAuthor(BasePermission):
@@ -15,10 +17,28 @@ class IsAuthor(BasePermission):
         """
         The instance must have an author attribute and be equal to the authenticated user.
         """
+        if request.method == 'GET':
+            return True
+        elif request.user.is_superuser:
+            return True
+        return obj.author == request.user
+
+
+class IsAuthorOrContributor(BasePermission):
+    """
+    Authorization at the object level to allow only the authors of an object to modify it.
+    Assumes the model instance has an "author" attribute.
+    Return true if it's a get method and the user is admin.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        """
+        The instance must have an author attribute and be equal to the authenticated user.
+        """
         project = get_object_or_404(Project, pk=view.kwargs.get("id_project"))
         if request.method == 'GET' and request.user in project.contributors.all():
             return True
-        if request.user.is_superuser:
+        elif request.user.is_superuser:
             return True
         return obj.author == request.user
 
@@ -36,7 +56,7 @@ class IsProjectAuthor(BasePermission):
         project = get_object_or_404(Project, pk=view.kwargs.get("id_project"))
         if request.method == 'GET' and request.user in project.contributors.all():
             return True
-        if request.user.is_superuser:
+        elif request.user.is_superuser:
             return True
         return request.user == project.author
 
