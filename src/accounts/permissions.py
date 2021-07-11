@@ -1,3 +1,5 @@
+"""Contains the permissions of accounts app."""
+
 # rest_framework
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import BasePermission

@@ -1,4 +1,4 @@
-"""Docstrings."""
+"""Contains the models of projects app."""
 
 # django
 from django.contrib.auth import get_user_model
@@ -15,7 +15,9 @@ class Project(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=1000)
     type = models.CharField(max_length=128)
-    author = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='author_project')
+    author = models.ForeignKey(
+        to=CustomUserModel, on_delete=models.CASCADE, related_name='author_project'
+    )
     contributors = models.ManyToManyField(CustomUserModel, through="Contributor")
     created_time = models.DateTimeField(auto_now_add=True)
 
@@ -26,7 +28,7 @@ class Project(models.Model):
 
     def __str__(self):
         """Represents the class objects as a string."""
-        return self.title
+        return str(self.title)
 
 
 class Contributor(models.Model):
@@ -38,11 +40,12 @@ class Contributor(models.Model):
     role = models.CharField(max_length=128)
 
     class Meta:
+        """Meta options."""
         unique_together = ('user', 'project')
 
     def __str__(self):
         """Represents the class objects as a string."""
-        return self.user
+        return str(self.user)
 
 
 class Issue(models.Model):
@@ -55,8 +58,12 @@ class Issue(models.Model):
     priority = models.CharField(max_length=128)
     status = models.CharField(max_length=128)
     created_time = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='author_issue')
-    assignee = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='assignee')
+    author = models.ForeignKey(
+        to=CustomUserModel, on_delete=models.CASCADE, related_name='author_issue'
+    )
+    assignee = models.ForeignKey(
+        to=CustomUserModel, on_delete=models.CASCADE, related_name='assignee'
+    )
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE, related_name='issue')
 
     class Meta:
@@ -66,7 +73,7 @@ class Issue(models.Model):
 
     def __str__(self):
         """Represents the class objects as a string."""
-        return self.title
+        return str(self.title)
 
 
 class Comment(models.Model):
@@ -74,7 +81,9 @@ class Comment(models.Model):
     This is a class allowing to create a Comment.
     """
     description = models.TextField(max_length=1000)
-    author = models.ForeignKey(to=CustomUserModel, on_delete=models.CASCADE, related_name='author_comment')
+    author = models.ForeignKey(
+        to=CustomUserModel, on_delete=models.CASCADE, related_name='author_comment'
+    )
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE, related_name='comment')
     created_time = models.DateTimeField(auto_now_add=True)
 

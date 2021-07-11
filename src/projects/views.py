@@ -1,4 +1,4 @@
-"""Docstrings."""
+"""Contains the views of projects app."""
 
 # lib
 from itertools import chain
@@ -17,10 +17,12 @@ from accounts.models import CustomUser
 from projects.models import Project, Contributor, Issue, Comment
 
 # permissions
-from projects.permissions import IsAuthor, IsProjectAuthor, IsProjectContributor, IsAuthorOrContributor
+from projects.permissions import IsAuthor, IsProjectAuthor, IsProjectContributor,\
+    IsAuthorOrContributor
 
 # serializers
-from projects.serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
+from projects.serializers import ProjectSerializer, ContributorSerializer, IssueSerializer,\
+    CommentSerializer
 
 
 class ProjectListCreateView(ListCreateAPIView):
@@ -31,7 +33,7 @@ class ProjectListCreateView(ListCreateAPIView):
     # A user must be authenticated
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         """
         Override of the get_queryset method to return projects related to the authenticated user.
         """
@@ -65,13 +67,13 @@ class ContributorListCreateView(ListCreateAPIView):
     # The user must be authenticated, be part of the contributor ou the author of the project.
     permission_classes = [IsAuthenticated, IsProjectAuthor]
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         """
         Override of the get_queryset method to return contributors related to the project.
         """
         return Contributor.objects.filter(project__id=self.kwargs.get('id_project'))
 
-    def perform_create(self, serializer, *args, **kwargs):
+    def perform_create(self, serializer):
         """
         Override of the perform_create method to add the projet and user instance.
         """
@@ -81,8 +83,8 @@ class ContributorListCreateView(ListCreateAPIView):
             raise ValidationError("An author cannot be added as a contributor")
         try:
             serializer.save(project=project, user=user)
-        except IntegrityError:
-            raise ValidationError('This user is already a contributor')
+        except IntegrityError as err:
+            raise ValidationError('This user is already a contributor') from err
 
 
 class ContributorDestroyView(DestroyAPIView):
@@ -103,13 +105,13 @@ class IssueListCreateView(ListCreateAPIView):
     # The user must be authenticated, be part of the contributor ou the author of the project.
     permission_classes = [IsAuthenticated, IsProjectContributor]
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         """
         Override of the get_queryset method to return issues related to the project.
         """
         return Issue.objects.filter(project__id=self.kwargs.get('id_project'))
 
-    def perform_create(self, serializer, *args, **kwargs):
+    def perform_create(self, serializer):
         """
         Override of the perform_create method to add the projet author and assignee.
         """
@@ -135,13 +137,13 @@ class CommentListCreateView(ListCreateAPIView):
     # The user must be authenticated, be part of the contributor ou the author of the project.
     permission_classes = [IsAuthenticated, IsProjectContributor]
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self):
         """
         Override of the get_queryset method to return comments related to the issue.
         """
         return Comment.objects.filter(issue__id=self.kwargs.get('id_issue'))
 
-    def perform_create(self, serializer, *args, **kwargs):
+    def perform_create(self, serializer):
         """
         Override of the perform_create method to add the issue and author.
         """

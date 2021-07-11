@@ -1,12 +1,12 @@
-"""Docstrings."""
+"""Contains the urls of projects app."""
 
 # django
 from django.urls import path
 
 # views
 from projects.views import ProjectListCreateView, ProjectUpdateDestroyDetailView, \
-    ContributorDestroyView, ContributorListCreateView, IssueListCreateView, IssueUpdateDestroyDetailView, \
-    CommentListCreateView, CommentUpdateDestroyDetailView
+    ContributorDestroyView, ContributorListCreateView, IssueListCreateView,\
+    IssueUpdateDestroyDetailView, CommentListCreateView, CommentUpdateDestroyDetailView
 
 urlpatterns = [
     # project
@@ -25,11 +25,15 @@ urlpatterns = [
     # GET, POST
     path('projects/<int:id_project>/issues/', IssueListCreateView.as_view()),
     # PUT, DELETE
-    path('projects/<int:id_project>/issues/<int:pk>/', IssueUpdateDestroyDetailView.as_view()),
+    path(
+        'projects/<int:id_project>/issues/<int:pk>/', IssueUpdateDestroyDetailView.as_view()
+    ),
 
     # comment
     # GET, POST
-    path('projects/<int:id_project>/issues/<int:id_issue>/comments/', CommentListCreateView.as_view()),
+    path(
+        'projects/<int:id_project>/issues/<int:id_issue>/comments/', CommentListCreateView.as_view()
+    ),
     path('projects/<int:id_project>/issues/<int:id_issue>/comments/<int:pk>/',
          CommentUpdateDestroyDetailView.as_view()),
 

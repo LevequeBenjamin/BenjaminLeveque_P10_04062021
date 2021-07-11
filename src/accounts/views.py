@@ -1,8 +1,10 @@
+"""Contains the views of accounts app."""
+
 # rest_framework
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView, UpdateAPIView, \
-    RetrieveUpdateAPIView, DestroyAPIView, CreateAPIView, get_object_or_404
+    RetrieveUpdateAPIView, DestroyAPIView, get_object_or_404, GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -13,8 +15,8 @@ from accounts.models import CustomUser
 from accounts.permissions import IsUser, IsUserRequest
 
 # serializers
-from accounts.serializers import CustomUserSerializer, RefreshTokenSerializer, UpdatePasswordSerializer, \
-    DestroyCustomUserSerializer
+from accounts.serializers import CustomUserSerializer, RefreshTokenSerializer,\
+    UpdatePasswordSerializer, DestroyCustomUserSerializer
 
 
 class CustomUserListView(ListAPIView):
@@ -27,7 +29,7 @@ class CustomUserListView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class LogoutView(CreateAPIView):
+class LogoutView(GenericAPIView):
     """
     Concrete view for adds the token to the blacklist.
     """
@@ -35,7 +37,8 @@ class LogoutView(CreateAPIView):
     # A user must be authenticated, be the user.
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args):
+    def post(self, request):
+        """Docstrings."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -63,7 +66,7 @@ class CustomUserDestroyView(DestroyAPIView):
     # A user must be authenticated, be the user.
     permission_classes = [IsAuthenticated, IsUserRequest]
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         """Returns the object the view is displaying."""
         obj = self.request.user
         return obj

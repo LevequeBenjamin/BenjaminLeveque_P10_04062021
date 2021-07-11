@@ -1,3 +1,5 @@
+"""Contains the permissions of projects app."""
+
 # rest_framework
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import BasePermission
@@ -19,7 +21,7 @@ class IsAuthor(BasePermission):
         """
         if request.method == 'GET':
             return True
-        elif request.user.is_superuser:
+        if request.user.is_superuser:
             return True
         return obj.author == request.user
 
@@ -38,7 +40,7 @@ class IsAuthorOrContributor(BasePermission):
         project = get_object_or_404(Project, pk=view.kwargs.get("id_project"))
         if request.method == 'GET' and request.user in project.contributors.all():
             return True
-        elif request.user.is_superuser:
+        if request.user.is_superuser:
             return True
         return obj.author == request.user
 
@@ -56,7 +58,7 @@ class IsProjectAuthor(BasePermission):
         project = get_object_or_404(Project, pk=view.kwargs.get("id_project"))
         if request.method == 'GET' and request.user in project.contributors.all():
             return True
-        elif request.user.is_superuser:
+        if request.user.is_superuser:
             return True
         return request.user == project.author
 

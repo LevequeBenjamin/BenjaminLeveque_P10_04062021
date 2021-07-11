@@ -1,4 +1,4 @@
-"""Docstrings."""
+"""Contains the serializers of projects app."""
 
 # rest_framework
 from rest_framework import serializers

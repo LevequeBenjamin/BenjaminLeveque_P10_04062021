@@ -1,4 +1,4 @@
-"""Docstrings."""
+"""Contains the models of accounts app."""
 
 # django
 from django.db import models
@@ -8,7 +8,9 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 class CustomAccountManager(BaseUserManager):
     """Inherits from BaseUserManager for creating CustomUser instance."""
-    def create_superuser(self, email, first_name=None, last_name=None, password=None, **other_fields):
+    def create_superuser(
+            self, email, first_name=None, last_name=None, password=None, **other_fields
+    ):
         """
         Creates and saves a superuser with the given email, firstname, lastname and password.
         """
@@ -55,4 +57,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
-        return self.email
+        return str(self.email)
