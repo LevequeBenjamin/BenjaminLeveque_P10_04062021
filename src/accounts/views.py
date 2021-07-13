@@ -15,7 +15,7 @@ from accounts.models import CustomUser
 from accounts.permissions import IsUser, IsUserRequest
 
 # serializers
-from accounts.serializers import CustomUserSerializer, RefreshTokenSerializer,\
+from accounts.serializers import CustomUserSerializer, RefreshTokenSerializer, \
     UpdatePasswordSerializer, DestroyCustomUserSerializer
 
 

@@ -49,7 +49,7 @@ class ProjectListCreateView(ListCreateAPIView):
         serializer.save(author=self.request.user)
 
 
-class ProjectUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
+class ProjectRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
     Concrete view for retrieving, updating or deleting a Project instance.
     """
@@ -119,7 +119,7 @@ class IssueListCreateView(ListCreateAPIView):
         serializer.save(project=project, author=self.request.user, assignee=project.author)
 
 
-class IssueUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
+class IssueRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
     Concrete view for retrieving, updating or deleting a Issue instance.
     """
@@ -151,7 +151,7 @@ class CommentListCreateView(ListCreateAPIView):
         serializer.save(issue=issue, author=self.request.user)
 
 
-class CommentUpdateDestroyDetailView(RetrieveUpdateDestroyAPIView):
+class CommentRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
     Concrete view for retrieving, updating or deleting a Comment instance.
     """
