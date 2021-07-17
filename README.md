@@ -37,6 +37,7 @@ $ git clone "https://github.com/LevequeBenjamin/BenjaminLeveque_P9_23062021.git"
 SECRET_KEY = 'django-insecure-ubq*h$699uyj-)0svi1i&o-7bwdk8kh&g&u@(w^p8%9c4o%xqv'
 DEBUG=True
 ALLOWED_HOSTS='127.0.0.1'
+CORS_ALLOWED_ORIGINS = 'http://localhost:8000'
 ```
 
 #### 3. Exécutez l'application dans un environnement virtuel
