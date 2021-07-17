@@ -157,4 +157,4 @@ class CommentRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     """
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
-    permission_classes = [IsAuthenticated, IsAuthor]
+    permission_classes = [IsAuthenticated, IsAuthorOrContributor]
