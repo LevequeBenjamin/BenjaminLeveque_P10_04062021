@@ -17,8 +17,8 @@ from accounts.models import CustomUser
 from projects.models import Project, Contributor, Issue, Comment
 
 # permissions
-from projects.permissions import IsProjectAuthor, IsProjectContributor,\
-    IsAuthorOrContributor
+from projects.permissions import IsProjectAuthor, IsProjectContributor, \
+    IsAuthorOrContributor, IsAuthor
 
 # serializers
 from projects.serializers import ProjectSerializer, ContributorSerializer, IssueSerializer,\
@@ -56,7 +56,7 @@ class ProjectRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
     # The user must be authenticated, the author of the issue or admin.
-    permission_classes = [IsAuthenticated, IsAuthorOrContributor]
+    permission_classes = [IsAuthenticated, IsAuthor]
 
 
 class ContributorListCreateView(ListCreateAPIView):
